@@ -165,8 +165,8 @@ export default function SignInForm() {
           warning ? "opacity-100 block" : "opacity-0 hidden"
         }`}
       >
-        <OctagonAlert className={`w-5 h-5 text-red-500 ${warning?.includes("successfully") ? "text-blue-500" : " text-red-500"}`} />
-        <div className={`text-red-500 text-sm ${warning?.includes("successfully") ? "text-blue-500" : " text-red-500"}`} >{warning}</div>
+        <OctagonAlert className={`w-5 h-5  ${warning?.includes("successfully") ? "text-blue-500" : " text-red-500"}`} />
+        <div className={` text-sm ${warning?.includes("successfully") ? "text-blue-500" : " text-red-500"}`} >{warning}</div>
       </div>
 
       {/* Divider */}

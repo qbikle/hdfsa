@@ -86,7 +86,7 @@ export default function Sidebar({
         <h2 className="lg:text-2xl font-semibold text-xl">
           Welcome, {username} !
         </h2>
-        <h3 className="lg:text-lg text-gray-500 text-lg ">Email:{email}</h3>
+        <h3 className="lg:text-lg text-gray-500 text-lg ">Email: {email}</h3>
       </div>
       <div className="flex flex-col p-5 gap-5 lg:hidden">
         <button
