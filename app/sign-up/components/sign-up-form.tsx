@@ -1,15 +1,7 @@
 "use client";
 import { sendOTP, verifyOTP } from "@/app/utils/helpers";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
-import { CalendarIcon, Eye, EyeOff, OctagonAlert } from "lucide-react";
+import { DatePicker } from "@/components/ui/date-picker";
+import { Eye, EyeOff, OctagonAlert } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -104,28 +96,7 @@ export default function SignUpForm() {
       </div>
 
       {/* DOB Field */}
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button
-            variant={"outline"}
-            className={cn(
-              "w-full justify-start text-left font-normal border-gray-300 h-11",
-              !dob && "text-muted-foreground"
-            )}
-          >
-            <CalendarIcon className="mr-2 h-4 w-4" />
-            {dob ? format(dob, "PPP") : <span>Pick a date</span>}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-auto p-0">
-          <Calendar
-            mode="single"
-            selected={dob}
-            onSelect={setDob}
-            initialFocus
-          />
-        </PopoverContent>
-      </Popover>
+      <DatePicker endYear={new Date().getFullYear()} onDateChange={setDob} />
 
       {/* Email Field */}
       <div className="relative">

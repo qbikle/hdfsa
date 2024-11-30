@@ -1,10 +1,11 @@
 "use client";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import NoteSideButton from "./note-side-button";
-import { Note } from "@/app/types";
+import { Note, session } from "@/app/types";
 import { signOut } from "@/app/utils/helpers";
 import { redirect } from "next/navigation";
+import CreateNoteModal from "./create-note-modal";
 
 export default function Sidebar({
   notes,
@@ -14,11 +15,21 @@ export default function Sidebar({
   notes: Note[];
   username: string;
   email: string;
+  session: session;
 }) {
   const handleSignOut = () => {
     signOut();
     redirect("/sign-in");
   };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => {
+    window.location.reload();
+    setIsModalOpen(false);
+  }
+
 
   return (
     <div className="flex flex-col h-full lg:w-80">
@@ -29,7 +40,9 @@ export default function Sidebar({
             <h1 className="text-xl lg:text-2xl">Dashboard</h1>
           </div>
           <div className="hidden lg:flex flex-col gap-10">
-            <button className="lg:block hidden px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 w-full transition-all ease-in-out duration-200">
+            <button
+            onClick={handleOpenModal}
+            className="lg:block hidden px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 w-full transition-all ease-in-out duration-200">
               Create Note
             </button>
             <div className="flex flex-col gap-4">
@@ -57,7 +70,7 @@ export default function Sidebar({
         <h3 className="lg:text-lg text-gray-500 text-lg ">Email:{email}</h3>
       </div>
       <div className="flex flex-col p-5 gap-5 lg:hidden">
-        <button className="px-4 py-4 mx-auto text-white bg-blue-600 rounded-md hover:bg-blue-700 w-full transition-all ease-in-out duration-200 ">
+        <button onClick={handleOpenModal} className="px-4 py-4 mx-auto text-white bg-blue-600 rounded-md hover:bg-blue-700 w-full transition-all ease-in-out duration-200 ">
           Create Note
         </button>
       </div>
@@ -67,6 +80,11 @@ export default function Sidebar({
           <NoteSideButton key={note.id} note={note} />
         ))}
       </div>
+      <CreateNoteModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onSave={() => {}}
+      />
     </div>
   );
 }

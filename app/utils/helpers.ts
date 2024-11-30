@@ -33,7 +33,7 @@ export const verifyOTP = async (
     const token = await generateJWT(data.user.id, data.user.email);
     const cookieStore = await cookies();
     cookieStore.set("token", token, {
-      expires: new Date(Date.now() + 1000 * 60 * 60),
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
       httpOnly: true,
       sameSite: "strict",
     });
@@ -65,7 +65,7 @@ export const verifySignIn = async (email: string, otp: string) => {
     const token = await generateJWT(data.user.id, data.user.email);
     const cookieStore = await cookies();
     cookieStore.set("token", token, {
-      expires: new Date(Date.now() + 1000 * 60 * 60),
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
       httpOnly: true,
       sameSite: "strict",
     });
@@ -88,7 +88,7 @@ export const getServerSession = async () => {
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value;
   if (!token) {
-    return { user: null , session : false};
+    return { user: null, session: false };
   }
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
@@ -100,10 +100,59 @@ export const getServerSession = async () => {
       where: { id: decoded.id },
     });
     if (!user) {
-      return { user: null , session : false};
+      return { user: null, session: false };
     }
-    return { user: user , session : true};
+    return { user: user, session: true };
   } catch (error) {
-    return { user: null , session : false};
+    return { user: null, session: false, error };
+  }
+};
+
+export const createNote = async (title: string, content: string) => {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+  if (!token) {
+    return { success: false, error: "Unauthorized" };
+  }
+  const res = await fetch("http://localhost:3000/api/notes/create", {
+    method: "POST",
+    body: JSON.stringify({ title, content, token }),
+  });
+
+  const data = await res.json();
+  if (res.ok) {
+    return { success: true, note: data.note };
+  } else {
+    return { success: false, error: data.error };
+  }
+};
+
+export const getAllUserNotes = async (userId: string) => {
+  const prisma = new PrismaClient();
+  const notes = await prisma.note.findMany({
+    where: {
+      userId,
+    },
+  });
+
+  return notes;
+};
+
+export const editNote = async (noteId: string, title: string, content: string) => {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+  if (!token) {
+    return { success: false, error: "Unauthorized" };
+  }
+  const res = await fetch("http://localhost:3000/api/notes/edit", {
+    method: "POST",
+    body: JSON.stringify({ noteId, title, content, token }),
+  });
+
+  const data = await res.json();
+  if (res.ok) {
+    return { success: true, note: data.note };
+  } else {
+    return { success: false, error: data.error };
   }
 };

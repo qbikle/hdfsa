@@ -1,9 +1,20 @@
 interface Note {
-    id: number;
+    id: string;
     title: string;
     content: string;
-    date: Date;
+    editedAt: Date;
+    createdAt: Date;
+    userId: string;
+}
+
+interface session {
+    user: {
+        id:string;
+        name: string;
+        email: string;
+    };
+    session: boolean;
 }
 
 
-export type { Note };
+export type { Note, session };
