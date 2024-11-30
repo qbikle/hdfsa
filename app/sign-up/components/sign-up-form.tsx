@@ -11,9 +11,11 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon, Eye, EyeOff, OctagonAlert } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function SignUpForm() {
+  const router = useRouter();
   const [warning, setWarning] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -50,7 +52,7 @@ export default function SignUpForm() {
       default:
         verifyOTP(formData, dob).then((res) => {
           if (res.success) {
-            alert("Signup successful");
+            router.push("/notes");
           } else {
             alert(res.error);
           }

@@ -1,8 +1,16 @@
 import Sidebar from "@/components/ui/sidebar";
+import { getServerSession } from "../utils/helpers";
+import { redirect } from "next/navigation";
 
-export default function Dashboard() {
-  const username = "John Doe";
-  const email = "mail@mail.com";
+export default async function Dashboard() {
+  const session = await getServerSession();
+
+  if (!session.session && !session.user) {
+    redirect("/sign-in");
+  }
+
+  const username = session.user?.name;
+  const email = session.user?.email;
   const notes = [
     {
       id: 1,
@@ -31,7 +39,7 @@ export default function Dashboard() {
   ];
   return (
     <div className="min-h-screen flex w-screen lg:flex">
-      <Sidebar notes={notes} username={username} email={email} />
+      <Sidebar notes={notes} username={username ?? ""} email={email ?? ""} />
       <div className="w-full">
         <h1 className="text-4xl text-center mt-10">Welcome, {username}!</h1>
         <h2 className="text-3xl ml-10 mt-10">Your Notes</h2>

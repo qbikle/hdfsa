@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import { generateJWT } from "@/app/utils/helpers";
 
 const prisma = new PrismaClient();
 
@@ -38,7 +37,6 @@ export async function POST(req: Request) {
     },
   });
 
-  const token = await generateJWT(user.id, email);
 
   // Clean up OTP record
   await prisma.oTP.delete({ where: { id: otpRecord.id } });
@@ -48,9 +46,5 @@ export async function POST(req: Request) {
   });
 
   const response = NextResponse.json({ message: "Signup successful", user });
-  response.cookies.set("token", token, {
-    httpOnly: true,
-    maxAge: 60 * 60 * 24 * 7, //-) 7 days
-  });
   return response;
 }
