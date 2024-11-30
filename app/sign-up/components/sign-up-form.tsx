@@ -1,4 +1,5 @@
 "use client";
+import { useLoading } from "@/app/context/loading-context";
 import { sendOTP, verifyOTP } from "@/app/utils/helpers";
 import { DatePicker } from "@/components/ui/date-picker";
 import { Eye, EyeOff, OctagonAlert } from "lucide-react";
@@ -19,33 +20,40 @@ export default function SignUpForm() {
   });
 
   const [dob, setDob] = useState<Date>();
-
+  const { setLoading } = useLoading();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
+    setLoading(true);
     e.preventDefault();
     setSubmitted(true);
     switch (true) {
       case !formData.name:
+        setLoading(false);
         setWarning("Name is required");
         break;
       case !dob:
+        setLoading(false);
         setWarning("Date of birth is required");
         break;
       case !formData.email:
+        setLoading(false);
         setWarning("A valid E-mail is required");
         break;
       case !formData.otp:
+        setLoading(false);
         setWarning("OTP is required");
         break;
       default:
         verifyOTP(formData, dob).then((res) => {
           if (res.success) {
+            setLoading(false);
             router.push("/notes");
           } else {
+            setLoading(false);
             alert(res.error);
           }
         });
@@ -174,8 +182,8 @@ export default function SignUpForm() {
           warning ? "opacity-100 block" : "opacity-0 hidden"
         }`}
       >
-        <OctagonAlert className="w-5 h-5 text-red-500" />
-        <div className={`text-red-500 text-sm`}>{warning}</div>
+        <OctagonAlert className={`w-5 h-5 ${warning?.includes("successfully") ? "text-blue-500" : " text-red-500"}`} />
+        <div className={`text-red-500 text-sm ${warning?.includes("successfully") ? "text-blue-500" : " text-red-500"}`} >{warning}</div>
       </div>
 
       {/* Divider */}

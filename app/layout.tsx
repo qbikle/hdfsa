@@ -29,10 +29,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="light">
-      <LoadingProvider>
-        <LoadingOverlay />
-        <body className={inter.className}>{children}</body>
-      </LoadingProvider>
+      <body className={inter.className}>
+        <LoadingProvider>
+          <LoadingOverlay />
+          {children}
+        </LoadingProvider>
+      </body>
     </html>
   );
 }

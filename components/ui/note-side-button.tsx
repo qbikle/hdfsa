@@ -16,7 +16,6 @@ export default function NoteSideButton({ note }: { note: Note }) {
   const closeModal = () => {
     setIsModalOpen(false);
     setCurrentNote(null);
-    window.location.reload();
   };
 
   const handleDelete = async () => {

@@ -19,7 +19,6 @@ export default function NotesDisplay({ notes }: { notes: Note[] }) {
   const closeModal = () => {
     setIsModalOpen(false);
     setCurrentNote(null);
-    window.location.reload();
   };
 
   const [sortedNotes, setSortedNotes] = useState(notes);
@@ -65,14 +64,14 @@ export default function NotesDisplay({ notes }: { notes: Note[] }) {
       <div className="flex justify-between items-center px-10 mt-10">
         <h2 className="text-3xl ">Your Notes</h2>
         <div className="flex relative">
-            <input
-              type="text"
-              placeholder="Search Notes"
-              value={searchQuery}
-              onChange={handleSearch}
-              className="p-2 border-2 rounded-md relative w-96"
-            />
-            <Search className="absolute right-2 top-2 text-gray-300" />
+          <input
+            type="text"
+            placeholder="Search Notes"
+            value={searchQuery}
+            onChange={handleSearch}
+            className="p-2 border-2 rounded-md relative w-96"
+          />
+          <Search className="absolute right-2 top-2 text-gray-300" />
         </div>
         <div className="flex justify-center ">
           <select
@@ -88,6 +87,12 @@ export default function NotesDisplay({ notes }: { notes: Note[] }) {
         </div>
       </div>
       <div className="flex flex-col items-center h-full ">
+        {sortedNotes.length === 0 && (
+          <>
+            <h2 className="text-2xl text-gray-400 mt-20">No Notes Found</h2>
+            <h3 className="text-xl text-gray-500 mt-5">So empty... :-(</h3>
+          </>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full h-full overflow-auto p-5">
           <Suspense fallback={<LoaderPinwheel />}>
             {sortedNotes.map((note) => (

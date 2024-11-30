@@ -1,3 +1,4 @@
+import { useLoading } from "@/app/context/loading-context";
 import { Note } from "@/app/types";
 import { deleteNote, editNote } from "@/app/utils/helpers";
 import { useState } from "react";
@@ -14,7 +15,10 @@ const NoteModal: React.FC<NoteModalProps> = ({ note, isOpen, onClose }) => {
     content: note?.content || "",
   });
 
+  const { setLoading } = useLoading();
+
   const handleEdit = async () => {
+    setLoading(true);
     if (newNote.title && newNote.content) {
       const res = await editNote(
         note.id,
@@ -23,23 +27,29 @@ const NoteModal: React.FC<NoteModalProps> = ({ note, isOpen, onClose }) => {
       );
       if (res.success) {
         onClose();
+        setLoading(false);
         window.location.reload();
       } else {
+        setLoading(false);
         alert("Failed to edit note!");
       }
     } else {
+      setLoading(false);
       alert("Please fill all fields!");
     }
   }
 
   const handleDelete = async () => {
+    setLoading(true);
     const res = await deleteNote(
       note.id
     );
     if (res.success) {
+      setLoading(false);
       onClose();
       window.location.reload();
     } else {
+      setLoading(false);
       alert("Failed to delete note!");
     }
   }

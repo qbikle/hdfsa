@@ -1,4 +1,5 @@
 "use client";
+import { useLoading } from "@/app/context/loading-context";
 import { sendOTP, verifySignIn } from "@/app/utils/helpers";
 import { Eye, EyeOff, OctagonAlert } from "lucide-react";
 import Image from "next/image";
@@ -17,12 +18,15 @@ export default function SignInForm() {
     otp: "",
   });
 
+  const { setLoading } = useLoading();
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
+    setLoading(true);
     e.preventDefault();
     setSubmitted(true);
     setWarning(null);
@@ -30,12 +34,15 @@ export default function SignInForm() {
     if (!formData.email || !formData.otp) {
       setWarning("Email & OTP are required");
       setDisabled(false);
+      setLoading(false);
       return;
     }
     verifySignIn(formData.email, formData.otp).then((res) => {
       if (res.success) {
+        setLoading(false);
         router.push("/notes");
       } else {
+        setLoading(false);
         alert(res.error);
       }
     });
@@ -158,8 +165,8 @@ export default function SignInForm() {
           warning ? "opacity-100 block" : "opacity-0 hidden"
         }`}
       >
-        <OctagonAlert className="w-5 h-5 text-red-500" />
-        <div className={`text-red-500 text-sm`}>{warning}</div>
+        <OctagonAlert className={`w-5 h-5 text-red-500 ${warning?.includes("successfully") ? "text-blue-500" : " text-red-500"}`} />
+        <div className={`text-red-500 text-sm ${warning?.includes("successfully") ? "text-blue-500" : " text-red-500"}`} >{warning}</div>
       </div>
 
       {/* Divider */}

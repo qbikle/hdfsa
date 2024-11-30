@@ -6,6 +6,8 @@ import { Note, session } from "@/app/types";
 import { signOut } from "@/app/utils/helpers";
 import { redirect } from "next/navigation";
 import CreateNoteModal from "./create-note-modal";
+import { useLoading } from "@/app/context/loading-context";
+import { Frown } from "lucide-react";
 
 export default function Sidebar({
   notes,
@@ -17,8 +19,11 @@ export default function Sidebar({
   email: string;
   session: session;
 }) {
+  const { setLoading } = useLoading();
   const handleSignOut = () => {
+    setLoading(true);
     signOut();
+    setLoading(false);
     redirect("/sign-in");
   };
 
@@ -26,10 +31,8 @@ export default function Sidebar({
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => {
-    window.location.reload();
     setIsModalOpen(false);
-  }
-
+  };
 
   return (
     <div className="flex flex-col h-full w-full lg:w-80">
@@ -41,17 +44,32 @@ export default function Sidebar({
           </div>
           <div className="hidden lg:flex flex-col gap-10">
             <button
-            onClick={handleOpenModal}
-            className="lg:block hidden px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 w-full transition-all ease-in-out duration-200">
+              onClick={handleOpenModal}
+              className="lg:block hidden px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 w-full transition-all ease-in-out duration-200"
+            >
               Create Note
             </button>
             <div className="flex flex-col gap-4">
               <h2 className="text-xl font-semibold">Recent Notes</h2>
-              {notes.sort((a, b) => {
-                return new Date(b.editedAt).getTime() - new Date(a.editedAt).getTime();
-              }).map((note) => (
-                <NoteSideButton key={note.id} note={note} />
-              ))}
+              {notes.length === 0 && (
+                <div className="flex flex-col w-full gap-5 text-center">
+                  <div className="text-2xl text-gray-300 mt-28">
+                    Nothing to show here
+                  </div>{" "}
+                  <Frown className="w-10 h-10 text-gray-300 mx-auto" />
+                </div>
+              )}
+
+              {notes
+                .sort((a, b) => {
+                  return (
+                    new Date(b.editedAt).getTime() -
+                    new Date(a.editedAt).getTime()
+                  );
+                })
+                .map((note) => (
+                  <NoteSideButton key={note.id} note={note} />
+                ))}
             </div>
           </div>
         </div>
@@ -71,12 +89,20 @@ export default function Sidebar({
         <h3 className="lg:text-lg text-gray-500 text-lg ">Email:{email}</h3>
       </div>
       <div className="flex flex-col p-5 gap-5 lg:hidden">
-        <button onClick={handleOpenModal} className="px-4 py-4 mx-auto text-white bg-blue-600 rounded-md hover:bg-blue-700 w-full transition-all ease-in-out duration-200 ">
+        <button
+          onClick={handleOpenModal}
+          className="px-4 py-4 mx-auto text-white bg-blue-600 rounded-md hover:bg-blue-700 w-full transition-all ease-in-out duration-200 "
+        >
           Create Note
         </button>
       </div>
       <div className="flex flex-col w-full p-3 items-center gap-5 lg:hidden">
         <h2 className="text-xl font-semibold w-full text-left ml-8">Notes</h2>
+        {notes.length === 0 && (
+          <div className="text-2xl text-gray-300 mt-40">
+            Nothin to show here
+          </div>
+        )}
         {notes.map((note) => (
           <NoteSideButton key={note.id} note={note} />
         ))}

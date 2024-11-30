@@ -1,3 +1,4 @@
+import { useLoading } from "@/app/context/loading-context";
 import { Note } from "@/app/types";
 import { createNote } from "@/app/utils/helpers";
 import React, { useState } from "react";
@@ -10,13 +11,14 @@ interface CreateNoteModalProps {
 }
 
 const CreateNoteModal: React.FC<CreateNoteModalProps> = ({ isOpen, onClose, onSave }) => {
-
+  const { setLoading } = useLoading();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
   if (!isOpen) return null; // Do not render if modal is closed
 
   const handleSave = async () => {
+    setLoading(true);
     if (title && content) {
       const newNote = {
         title,
@@ -27,9 +29,12 @@ const CreateNoteModal: React.FC<CreateNoteModalProps> = ({ isOpen, onClose, onSa
         alert("Failed to create note!");
         return;
         }
+      setLoading(false);
       onSave(res.note); // Pass the new note to the parent
+      window.location.reload();
       onClose(); // Close the modal
     } else {
+      setLoading(false);
       alert("Please fill all fields!");
     }
   };
