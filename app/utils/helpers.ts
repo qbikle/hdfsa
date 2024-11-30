@@ -156,3 +156,22 @@ export const editNote = async (noteId: string, title: string, content: string) =
     return { success: false, error: data.error };
   }
 };
+
+export const deleteNote = async (noteId: string) => {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+  if (!token) {
+    return { success: false, error: "Unauthorized" };
+  }
+  const res = await fetch("http://localhost:3000/api/notes/delete", {
+    method: "POST",
+    body: JSON.stringify({ id: noteId, token }),
+  });
+
+  const data = await res.json();
+  if (res.ok) {
+    return { success: true };
+  } else {
+    return { success: false, error: data.error };
+  }
+}

@@ -32,8 +32,8 @@ export default function Sidebar({
 
 
   return (
-    <div className="flex flex-col h-full lg:w-80">
-      <div className="flex justify-between w-screen lg:w-80 lg:flex-col lg:space-y-4 lg:min-h-screen lg:border lg:rounded-xl">
+    <div className="flex flex-col h-full w-full lg:w-80">
+      <div className="flex justify-between w-[100%] lg:w-80 lg:flex-col lg:space-y-4 lg:min-h-screen lg:border lg:rounded-xl">
         <div className="flex flex-col justify-start p-5">
           <div className="flex items-center space-x-2 p-4 gap-5 lg:pb-10 w-full">
             <Image src="/logo.svg" alt="logo" width={32} height={32} />
@@ -47,8 +47,9 @@ export default function Sidebar({
             </button>
             <div className="flex flex-col gap-4">
               <h2 className="text-xl font-semibold">Recent Notes</h2>
-
-              {notes.map((note) => (
+              {notes.sort((a, b) => {
+                return new Date(b.editedAt).getTime() - new Date(a.editedAt).getTime();
+              }).map((note) => (
                 <NoteSideButton key={note.id} note={note} />
               ))}
             </div>
@@ -63,7 +64,7 @@ export default function Sidebar({
           </button>
         </div>
       </div>
-      <div className="flex flex-col w-auto lg:w-80 lg:flex-col lg:space-y-4 shadow-lg px-5 py-10 m-5 gap-4 border rounded-xl lg:hidden">
+      <div className="flex flex-col  lg:w-80 lg:flex-col lg:space-y-4 shadow-lg px-5 py-10 m-5 gap-4 border rounded-xl lg:hidden">
         <h2 className="lg:text-2xl font-semibold text-xl">
           Welcome, {username} !
         </h2>
@@ -74,8 +75,8 @@ export default function Sidebar({
           Create Note
         </button>
       </div>
-      <div className="flex flex-col p-5 gap-5 lg:hidden">
-        <h2 className="text-xl font-semibold">Notes</h2>
+      <div className="flex flex-col w-full p-3 items-center gap-5 lg:hidden">
+        <h2 className="text-xl font-semibold w-full text-left ml-8">Notes</h2>
         {notes.map((note) => (
           <NoteSideButton key={note.id} note={note} />
         ))}

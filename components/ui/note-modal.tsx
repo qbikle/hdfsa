@@ -1,5 +1,5 @@
 import { Note } from "@/app/types";
-import { editNote } from "@/app/utils/helpers";
+import { deleteNote, editNote } from "@/app/utils/helpers";
 import { useState } from "react";
 
 interface NoteModalProps {
@@ -29,6 +29,18 @@ const NoteModal: React.FC<NoteModalProps> = ({ note, isOpen, onClose }) => {
       }
     } else {
       alert("Please fill all fields!");
+    }
+  }
+
+  const handleDelete = async () => {
+    const res = await deleteNote(
+      note.id
+    );
+    if (res.success) {
+      onClose();
+      window.location.reload();
+    } else {
+      alert("Failed to delete note!");
     }
   }
 
@@ -76,8 +88,14 @@ const NoteModal: React.FC<NoteModalProps> = ({ note, isOpen, onClose }) => {
             Edit
           </button>
           <button
-            onClick={onClose}
+            onClick={handleDelete}
             className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+          >
+            Delete
+          </button>
+          <button
+            onClick={onClose}
+            className="px-4 py-2 bg-neutral-500 text-white rounded hover:bg-neutral-600"
           >
             Close
           </button>

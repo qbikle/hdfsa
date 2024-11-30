@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Inter } from 'next/font/google'
+import { Inter } from "next/font/google";
+import LoadingOverlay from "@/components/loading-overlay";
+import { LoadingProvider } from "./context/loading-context";
 
 // const geistSans = localFont({
 //   src: "./fonts/GeistVF.woff",
@@ -13,7 +15,7 @@ import { Inter } from 'next/font/google'
 //   weight: "100 900",
 // });
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Notes",
@@ -27,7 +29,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="light">
-      <body className={inter.className}>{children}</body>
+      <LoadingProvider>
+        <LoadingOverlay />
+        <body className={inter.className}>{children}</body>
+      </LoadingProvider>
     </html>
   );
 }
