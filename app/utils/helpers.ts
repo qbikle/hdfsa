@@ -1,10 +1,9 @@
 "use server";
 import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
-import { cookies, headers } from "next/headers";
+import { cookies, } from "next/headers";
 
-const headersList = await headers();
-const URLORIGIN = headersList.get("origin");
+const URLORIGIN = process.env.URL_ORIGIN;
 
 export const sendOTP = async (email: string) => {
   const res = await fetch(`${URLORIGIN}/api/send-otp`, {
