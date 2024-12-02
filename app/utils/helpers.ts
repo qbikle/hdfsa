@@ -3,8 +3,10 @@ import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 
+const URLORIGIN = window.location.origin;
+
 export const sendOTP = async (email: string) => {
-  const res = await fetch("http://localhost:3000/api/send-otp", {
+  const res = await fetch(`${URLORIGIN}/api/send-otp`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email }),
@@ -22,7 +24,7 @@ export const verifyOTP = async (
   formData: { email: string; otp: string; name: string },
   dob: Date
 ) => {
-  const res = await fetch("http://localhost:3000/api/verify-otp", {
+ const res = await fetch(`${URLORIGIN}/api/verify-otp`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ ...formData, dob: dob.toString() }),
@@ -54,7 +56,7 @@ export const generateJWT = async (userId: string, email: string) => {
 };
 
 export const verifySignIn = async (email: string, otp: string) => {
-  const res = await fetch("http://localhost:3000/api/verify-signin", {
+  const res = await fetch(`${URLORIGIN}/api/verify-signin`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, otp }),
@@ -114,7 +116,7 @@ export const createNote = async (title: string, content: string) => {
   if (!token) {
     return { success: false, error: "Unauthorized" };
   }
-  const res = await fetch("http://localhost:3000/api/notes/create", {
+  const res = await fetch(`${URLORIGIN}/api/notes/create`, {
     method: "POST",
     body: JSON.stringify({ title, content, token }),
   });
@@ -144,7 +146,7 @@ export const editNote = async (noteId: string, title: string, content: string) =
   if (!token) {
     return { success: false, error: "Unauthorized" };
   }
-  const res = await fetch("http://localhost:3000/api/notes/edit", {
+  const res = await fetch(`${URLORIGIN}/api/notes/edit`, {
     method: "POST",
     body: JSON.stringify({ noteId, title, content, token }),
   });
@@ -163,7 +165,7 @@ export const deleteNote = async (noteId: string) => {
   if (!token) {
     return { success: false, error: "Unauthorized" };
   }
-  const res = await fetch("http://localhost:3000/api/notes/delete", {
+  const res = await fetch(`${URLORIGIN}/api/notes/delete`, {
     method: "POST",
     body: JSON.stringify({ id: noteId, token }),
   });
