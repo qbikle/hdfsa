@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
 import { cookies, } from "next/headers";
 
-const URLORIGIN = process.env.URL_ORIGIN;
+const URLORIGIN = "https://hdfsa.vercel.app";
 
 export const sendOTP = async (email: string) => {
   const res = await fetch(`${URLORIGIN}/api/send-otp`, {
