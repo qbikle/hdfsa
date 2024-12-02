@@ -52,6 +52,9 @@ POSTGRES_URL_NON_POOLING=postgresql://<username>:<password>@<host>:<port>/<datab
 JWT_SECRET=your_jwt_secret
 
 # Bun-specific environment variables (optional)
+# Email-specific environment variables (required)
+
+# For reference look for .env.example file in root directory of this repository.
 ```
 
 For Vercel Postgres, get the connection details from your Vercel dashboard.
@@ -62,7 +65,7 @@ For Vercel Postgres, get the connection details from your Vercel dashboard.
 
 ### **1. Clone the Repository**
 ```bash
-git clone https://github.com/your-username/notes-app.git
+git clone https://github.com/qbikle/hdfsa
 cd notes-app
 ```
 
@@ -125,7 +128,7 @@ npm run build
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/notes-app.git
+   git clone https://github.com/qbikle/hdfsa
    cd notes-app
    ```
 
@@ -188,8 +191,3 @@ npm run build
    git push origin feature-name
    ```
 5. Open a Pull Request.
-
----
-
-## **License**
-This project is licensed under the MIT License. See the `LICENSE` file for more details.
